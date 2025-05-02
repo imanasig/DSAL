@@ -17,7 +17,6 @@ class BST {
 private:
     Node* root;
 
-    //Insert
     Node* insert(Node* node, int val) {
         if (!node) return new Node(val);
         if (val < node->data)
@@ -27,7 +26,6 @@ private:
         return node;
     }
 
-    //Count longest path (height)
     int longestPath(Node* node) {
         if (!node) return 0;
         int leftDepth = longestPath(node->left);
@@ -35,7 +33,6 @@ private:
         return max(leftDepth, rightDepth) + 1;
     }
 
-    //Find min value
     int minValue(Node* node) {
         if (!node) throw runtime_error("Tree is empty.");
         while (node->left)
@@ -43,7 +40,6 @@ private:
         return node->data;
     }
 
-    //Mirror tree
     void mirror(Node* node) {
         if (!node) return;
         swap(node->left, node->right);
@@ -51,7 +47,6 @@ private:
         mirror(node->right);
     }
 
-    //Search
     bool search(Node* node, int key) {
         if (!node) return false;
         if (node->data == key) return true;
@@ -60,7 +55,6 @@ private:
         return search(node->right, key);
     }
 
-    //Delete node
     Node* deleteNode(Node* node, int key) {
         if (!node) return nullptr;
 
@@ -69,7 +63,6 @@ private:
         else if (key > node->data)
             node->right = deleteNode(node->right, key);
         else {
-            // Node found
             if (!node->left && !node->right) {
                 delete node;
                 return nullptr;
@@ -82,7 +75,6 @@ private:
                 delete node;
                 return temp;
             } else {
-                // Two children
                 int minVal = minValue(node->right);
                 node->data = minVal;
                 node->right = deleteNode(node->right, minVal);
@@ -91,7 +83,6 @@ private:
         return node;
     }
 
-    // Traversals
     void inorder(Node* node) {
         if (node) {
             inorder(node->left);
@@ -116,7 +107,6 @@ private:
         }
     }
 
-    // BFS
     void bfs(Node* node) {
         if (!node) {
             cout << "Tree is empty.\n";
@@ -170,7 +160,7 @@ public:
     void displayBFS() {
         cout << "\nBFS (Level Order): ";
         bfs(root);
-        cout << endl;
+        cout<< endl;
     }
 
     void mirrorTree() {
@@ -189,22 +179,27 @@ public:
             cout << e.what() << endl;
         }
     }
+
+    void insertMultiple() {
+        int n, val;
+        cout << "How many values do you want to insert? ";
+        cin >> n;
+        cout << "Enter values: ";
+        for (int i = 0; i < n; i++) {
+            cin >> val;
+            insert(val);
+        }
+    }
 };
 
 int main() {
     BST tree;
-    int initial[] = {50, 30, 70, 20, 40, 60, 80};
-
-    // Construct BST
-    for (int val : initial)
-        tree.insert(val);
-
     int choice, val;
 
     do {
         cout << "\n--- Binary Search Tree Operations ---\n";
-        cout << "1. Insert\n2. Delete\n3. Search\n4. Mirror Tree\n5. Longest Path\n";
-        cout << "6. Minimum Value\n7. Inorder/Preorder/Postorder\n8. BFS\n9. Exit\n";
+        cout << "1. Insert Single Value\n2. Insert Multiple Values\n3. Delete\n4. Search\n5. Mirror Tree\n";
+        cout << "6. Longest Path\n7. Minimum Value\n8. Inorder/Preorder/Postorde\n9. Display BFS\n 10. Exit\n";
         cout << "Enter choice: ";
         cin >> choice;
 
@@ -215,37 +210,41 @@ int main() {
                 tree.insert(val);
                 break;
             case 2:
+                tree.insertMultiple();
+                break;
+            case 3:
                 cout << "Enter value to delete: ";
                 cin >> val;
                 tree.deleteValue(val);
                 break;
-            case 3:
+            case 4:
                 cout << "Enter value to search: ";
                 cin >> val;
                 tree.searchValue(val);
                 break;
-            case 4:
+            case 5:
                 tree.mirrorTree();
                 break;
-            case 5:
+            case 6:
                 tree.longestPathLength();
                 break;
-            case 6:
+            case 7:
                 tree.minData();
                 break;
-            case 7:
+            case 8:
                 tree.displayTraversals();
                 break;
-            case 8:
+            case 9:
                 tree.displayBFS();
                 break;
-            case 9:
-                cout << "ThankYou\n";
+            case 10:
+                cout << "Thank you!\n";
                 break;
+            
             default:
                 cout << "Invalid choice.\n";
         }
-    } while (choice != 9);
+    } while (choice != 10);
 
     return 0;
 }
