@@ -92,7 +92,8 @@ int main() {
                 cout << "Enter key: ";
                 cin >> key;
                 cout << "Enter value: ";
-                cin >> value;
+                cin.ignore();  // Clear the newline character from the input buffer
+                getline(cin, value); // Use getline to allow spaces in the value
                 dict.insert(key, value);
                 break;
 
