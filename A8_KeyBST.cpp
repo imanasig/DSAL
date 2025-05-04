@@ -1,6 +1,7 @@
 // Given sequence k = k1 < … < kn of n sorted keys, with a search probability pi for each key ki. Build  the Binary search tree that has the least search cost given the access probability for each key.
 #include <iostream>
 #include <vector>
+#include <climits>
 using namespace std;
 
 float optimalBST(vector<int> keys, vector<float> prob, int n) {
@@ -14,7 +15,7 @@ float optimalBST(vector<int> keys, vector<float> prob, int n) {
     for (int l = 2; l <= n; l++) {
         for (int i = 0; i <= n - l; i++) {
             int j = i + l - 1;
-            cost[i][j] = 1e9; // Use a large float instead of FLT_MAX
+            cost[i][j] = INT_MAX;
 
             // Try all roots from i to j
             for (int r = i; r <= j; r++) {
@@ -38,27 +39,51 @@ float optimalBST(vector<int> keys, vector<float> prob, int n) {
 }
 
 int main() {
-        int n;
-        cout << "Enter number of keys: ";
+    int n;
+    cout << "Enter number of keys: ";
+    cin >> n;
+
+    while (true) {
+        cout << "Enter number of keys (positive integer): ";
         cin >> n;
-    
-        vector<int> keys(n);
-        vector<float> prob(n);
-    
-        cout << "Enter " << n << " sorted keys:\n";
-        for (int i = 0; i < n; ++i) {
-            cout << "Key " << i + 1 << ": ";
-            cin >> keys[i];
+        if (cin.fail() || n <= 0) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Invalid input! Please enter a positive integer.\n";
+        } else {
+            break;
         }
-    
-        cout << "Enter " << n << " corresponding search probabilities:\n";
-        for (int i = 0; i < n; ++i) {
-            cout << "Probability for key " << keys[i] << ": ";
-            cin >> prob[i];
-        }
-    
-        float minCost = optimalBST(keys, prob, n);
-        cout << "Minimum cost of Optimal BST: " << minCost << endl;
-    
-        return 0;
     }
+
+    vector<int> keys(n);
+    vector<float> prob(n);
+
+    cout << "Enter " << n << " sorted keys:\n";
+    for (int i = 0; i < n; ++i) {
+        cout << "Key " << i + 1 << ": ";
+        cin >> keys[i];
+    }
+
+    cout << "Enter " << n << " corresponding search probabilities (between 0 and 1):\n";
+    for (int i = 0; i < n; ++i) {
+        float p;
+        while (true) {
+            cout << "Probability for key " << keys[i] << ": ";
+            cin >> p;
+
+            if (cin.fail() || p < 0 || p > 1) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Invalid input! Probability must be a number between 0 and 1.\n";
+            } else {
+                prob[i] = p;
+                break;
+            }
+        }
+    }
+
+    float minCost = optimalBST(keys, prob, n);
+    cout << "\nMinimum cost of Optimal BST: " << minCost << endl;
+
+    return 0;
+}
